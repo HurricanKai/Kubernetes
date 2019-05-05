@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - image: grafana/grafana:latest
+        name: grafana
+        ports:
+        - containerPort: 3000
+          name: service
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/grafana
+        - name: data-volume
+          mountPath: /grafana
+          subPath: grafana
+      volumes:
+      - name: config-volume
+        configMap:
+          name: grafana-config
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: grafana-nfs

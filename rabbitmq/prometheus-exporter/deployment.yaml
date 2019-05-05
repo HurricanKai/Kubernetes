@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-exporter-deployment
+  labels:
+    app: rabbitmq-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-exporter
+  template:
+    metadata:
+      name: rabbitmq-exporter
+      labels:
+        app: rabbitmq-exporter
+    spec:
+      containers:
+      - image: kbudde/rabbitmq-exporter
+        name: rabbitmq-exporter
+        env:
+        - name: RABBIT_URL
+          value: "http://rabbitmq-service:15672"
+        - name: RABBIT_USER
+          value: "guest"
+        - name: RABBIT_PASSWORD
+          value: "guest"
+        ports:
+        - containerPort: 9419
+          name: service

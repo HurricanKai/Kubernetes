@@ -1,0 +1,18 @@
+resources:
+- volume-claim.yaml
+- service-account.yaml
+- cluster-role.yaml
+- role-binding.yaml
+- deployment.yaml
+- service.yaml
+
+bases:
+- blackbox-exporter
+
+configMapGenerator:
+- name: prometheus-config
+  files:
+  - config/prometheus.yml
+  
+generatorOptions:
+  disableNameSuffixHash: true
